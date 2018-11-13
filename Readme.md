@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Андрей Щербаков](https://up.htmlacademy.ru/javascript/16/user/560341).
-* Наставник: `Неизвестно`.
+* Наставник: [Иван Маковчик](https://up.htmlacademy.ru/javascript/16/user/922857).
 
 ---
 
