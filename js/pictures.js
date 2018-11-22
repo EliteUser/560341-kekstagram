@@ -1,12 +1,5 @@
 'use strict';
 
-/* Показ фильтрации изображений от других пользователей */
-
-var picturesFilterElement = document.querySelector('.img-filters');
-picturesFilterElement.classList.remove('img-filters--inactive');
-
-/* Генерация данных и отрисовка изображений пользователей */
-
 var PICTURES_QUANTITY = 25;
 var LIKES_MIN_QUANTITY = 15;
 var LIKES_MAX_QUANTITY = 200;
@@ -27,6 +20,13 @@ var DESCRIPTIONS = [
   'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
   'Вот это тачка!',
 ];
+
+/* Показ фильтрации изображений от других пользователей */
+
+var picturesFilterElement = document.querySelector('.img-filters');
+picturesFilterElement.classList.remove('img-filters--inactive');
+
+/* Генерация данных и отрисовка изображений пользователей */
 
 var getRandomInteger = function (min, max) {
   return Math.round((Math.random() * (max - min)) + min);
@@ -85,9 +85,6 @@ var renderUserPictures = function (pictures) {
   userPicturesContainer.appendChild(fragment);
 };
 
-var picturesData = generatePicturesData();
-renderUserPictures(picturesData);
-
 /* Полноэкранный показ изображения */
 
 var bigPictureElement = document.querySelector('.big-picture');
@@ -133,5 +130,7 @@ var renderBigPictureElement = function (picture) {
   renderBigPictureComments(picture.comments);
 };
 
-renderBigPictureElement(picturesData[0]);
+var picturesData = generatePicturesData();
+renderUserPictures(picturesData);
+renderBigPictureElement(picturesData[getRandomInteger(0, PICTURES_QUANTITY - 1)]);
 bigPictureElement.classList.remove('hidden');
