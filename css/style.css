@@ -222,6 +222,8 @@ main {
 }
 
 .picture__img {
+  position: relative;
+  z-index: -1;
   max-width: auto;
   width: 100%;
   height: auto;
