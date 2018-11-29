@@ -52,16 +52,15 @@ var uploadPicture = function (file) {
     reader.readAsDataURL(file);
 
     picturePreview.appendChild(uploadedImg);
-    showSuccessMessage();
-  } else {
-    clearPicturePreview();
-    showErrorMessage();
   }
 };
 
 var showPictureOverlay = function () {
   pictureUploadOverlay.classList.remove('hidden');
   uploadFileButton.removeEventListener('change', fileLoadHandler);
+
+  uploadCancelButton.addEventListener('click', cancelBtnClickHandler);
+  document.addEventListener('keydown', cancelButtonEscHandler);
 };
 
 var hidePictureOverlay = function () {
@@ -87,68 +86,6 @@ var cancelButtonEscHandler = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     hidePictureOverlay();
   }
-};
-
-/* Показ / сокрытие сообщения об успешной загрузке */
-
-var successMessageOkClickHandler = function () {
-  hideSuccessMessage();
-};
-
-var successMessageOkEscHandler = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    hideSuccessMessage();
-  }
-};
-
-var showSuccessMessage = function () {
-  var successMessageElement = document.querySelector('#success')
-    .content
-    .querySelector('.success')
-    .cloneNode(true);
-
-  var successMessageOkButton = successMessageElement.querySelector('.success__button');
-  pictureUploadOverlay.appendChild(successMessageElement);
-
-  successMessageOkButton.addEventListener('click', successMessageOkClickHandler);
-  document.addEventListener('keydown', successMessageOkEscHandler);
-};
-
-var hideSuccessMessage = function () {
-  var message = pictureUploadOverlay.querySelector('.success');
-
-  message.querySelector('.success__button').removeEventListener('click', successMessageOkClickHandler);
-  document.removeEventListener('keydown', successMessageOkEscHandler);
-  pictureUploadOverlay.removeChild(message);
-
-  uploadCancelButton.addEventListener('click', cancelBtnClickHandler);
-  document.addEventListener('keydown', cancelButtonEscHandler);
-};
-
-/* Показ / сокрытие сообщения о неудачной загрузке */
-
-var errorMessageOkClickHandler = function () {
-  hideErrorMessage();
-};
-
-var showErrorMessage = function () {
-  var errorMessageElement = document.querySelector('#error')
-    .content
-    .querySelector('.error')
-    .cloneNode(true);
-  var errorMessageOkButton = errorMessageElement.querySelector('#upload');
-  pictureUploadOverlay.appendChild(errorMessageElement);
-
-  errorMessageOkButton.addEventListener('click', errorMessageOkClickHandler);
-};
-
-var hideErrorMessage = function () {
-  var message = pictureUploadOverlay.querySelector('.error');
-
-  message.querySelector('#upload').removeEventListener('click', errorMessageOkClickHandler);
-  pictureUploadOverlay.removeChild(message);
-  hidePictureOverlay();
-  uploadFileButton.click();
 };
 
 uploadFileButton.addEventListener('change', fileLoadHandler);

@@ -1,7 +1,6 @@
 'use strict';
 
 var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
 
 var PICTURES_QUANTITY = 25;
 var LIKES_MIN_QUANTITY = 15;
