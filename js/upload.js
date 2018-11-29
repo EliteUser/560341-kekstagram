@@ -52,6 +52,9 @@ var uploadPicture = function (file) {
     reader.readAsDataURL(file);
 
     picturePreview.appendChild(uploadedImg);
+  } else {
+    clearPicturePreview();
+    showErrorMessage();
   }
 };
 
@@ -86,6 +89,39 @@ var cancelButtonEscHandler = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     hidePictureOverlay();
   }
+};
+
+/* Показ / сокрытие сообщения о загрузке неверного файла */
+
+var errorMessageOkClickHandler = function () {
+  hideErrorMessage();
+  uploadFileButton.click();
+};
+
+var errorMessageCancelClickHandler = function () {
+  hideErrorMessage();
+};
+
+var showErrorMessage = function () {
+  var errorMessageElement = document.querySelector('#wrong')
+    .content
+    .querySelector('.error')
+    .cloneNode(true);
+  var errorMessageOkButton = errorMessageElement.querySelector('#load');
+  var errorMessageCancelButton = errorMessageElement.querySelector('#cancel');
+  pictureUploadOverlay.appendChild(errorMessageElement);
+
+  errorMessageOkButton.addEventListener('click', errorMessageOkClickHandler);
+  errorMessageCancelButton.addEventListener('click', errorMessageCancelClickHandler);
+};
+
+var hideErrorMessage = function () {
+  var message = pictureUploadOverlay.querySelector('.error');
+
+  message.querySelector('#load').removeEventListener('click', errorMessageOkClickHandler);
+  message.querySelector('#cancel').removeEventListener('click', errorMessageCancelClickHandler);
+  pictureUploadOverlay.removeChild(message);
+  hidePictureOverlay();
 };
 
 uploadFileButton.addEventListener('change', fileLoadHandler);
