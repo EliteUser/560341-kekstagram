@@ -1,5 +1,7 @@
 'use strict';
 
+var ESC_KEYCODE = 27;
+
 var PICTURES_QUANTITY = 25;
 var LIKES_MIN_QUANTITY = 15;
 var LIKES_MAX_QUANTITY = 200;
@@ -21,13 +23,6 @@ var DESCRIPTIONS = [
   'Вот это тачка!',
 ];
 
-/* Показ фильтрации изображений от других пользователей */
-
-var picturesFilterElement = document.querySelector('.img-filters');
-picturesFilterElement.classList.remove('img-filters--inactive');
-
-/* Генерация данных и отрисовка изображений пользователей */
-
 var getRandomInteger = function (min, max) {
   return Math.round((Math.random() * (max - min)) + min);
 };
@@ -36,8 +31,8 @@ var getRandomArrayElement = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-var createPictureElement = function (url, likes, comments, description) {
-  return {url: url, likes: likes, comments: comments, description: description};
+var createPictureElement = function (url, likes, comments, description, index) {
+  return {url: url, likes: likes, comments: comments, description: description, index: index};
 };
 
 var generatePictureComments = function (comments) {
@@ -52,11 +47,12 @@ var generatePictureComments = function (comments) {
 var generatePicturesData = function () {
   var data = [];
   for (var i = 0; i < PICTURES_QUANTITY; i++) {
+    var pictureIndex = i;
     var pictureURL = 'photos/' + (i + 1) + '.jpg';
     var pictureLikes = getRandomInteger(LIKES_MIN_QUANTITY, LIKES_MAX_QUANTITY);
     var pictureComments = generatePictureComments(COMMENTS);
     var pictureDescription = getRandomArrayElement(DESCRIPTIONS);
-    data.push(createPictureElement(pictureURL, pictureLikes, pictureComments, pictureDescription));
+    data.push(createPictureElement(pictureURL, pictureLikes, pictureComments, pictureDescription, pictureIndex));
   }
   return data;
 };
@@ -70,6 +66,7 @@ var renderUserPicture = function (picture) {
   var pictureElement = userPictureTemplate.cloneNode(true);
 
   pictureElement.querySelector('.picture__img').src = picture.url;
+  pictureElement.dataset.index = picture.index;
   pictureElement.querySelector('.picture__likes').textContent = picture.likes;
   pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
 
@@ -89,6 +86,7 @@ var renderUserPictures = function (pictures) {
 
 var bigPictureElement = document.querySelector('.big-picture');
 var bigPictureCommentsList = bigPictureElement.querySelector('.social__comments');
+var bigPictureCloseButton = bigPictureElement.querySelector('.big-picture__cancel');
 var pictureCommentTemplate = document.querySelector('#comment')
   .content
   .querySelector('.social__comment');
@@ -128,9 +126,56 @@ var renderBigPictureElement = function (picture) {
   bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
   bigPictureElement.querySelector('.social__caption').textContent = picture.description;
   renderBigPictureComments(picture.comments);
+
+  bigPictureElement.querySelector('.social__footer-text').focus();
 };
+
+/* Показ фильтрации изображений от других пользователей */
+
+var picturesFilterElement = document.querySelector('.img-filters');
+picturesFilterElement.classList.remove('img-filters--inactive');
+
+/* Отрисовка изображений */
 
 var picturesData = generatePicturesData();
 renderUserPictures(picturesData);
-renderBigPictureElement(picturesData[getRandomInteger(0, PICTURES_QUANTITY - 1)]);
-bigPictureElement.classList.remove('hidden');
+
+/* Обработчики событий - открытие / закрытие полноэкранного изображения */
+
+var showBigPicture = function (target) {
+  document.body.classList.add('modal-open');
+  bigPictureElement.classList.remove('hidden');
+
+  var pictureIndex = target.dataset.index;
+  renderBigPictureElement(picturesData[pictureIndex]);
+
+  bigPictureCloseButton.addEventListener('click', bigPictureCloseButtonClickHandler);
+  document.addEventListener('keydown', bigPictureCloseButtonEscHandler);
+};
+
+var hideBigPicture = function () {
+  bigPictureElement.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  bigPictureCloseButton.removeEventListener('click', bigPictureCloseButtonClickHandler);
+  document.removeEventListener('keydown', bigPictureCloseButtonEscHandler);
+};
+
+var userPicturesContainerClickHandler = function (evt) {
+  var target = evt.target;
+  if (target.classList.contains('picture')) {
+    evt.preventDefault();
+    showBigPicture(target);
+  }
+};
+
+var bigPictureCloseButtonClickHandler = function () {
+  hideBigPicture();
+};
+
+var bigPictureCloseButtonEscHandler = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    hideBigPicture();
+  }
+};
+
+userPicturesContainer.addEventListener('click', userPicturesContainerClickHandler);
