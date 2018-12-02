@@ -1,5 +1,7 @@
 'use strict';
 
+var MIN_PICTURE_SIZE = 0;
+var MAX_PICTURE_SIZE = 100;
 var SCALE_STEP = 25;
 
 var pictureUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -16,9 +18,9 @@ var scaleImage = function (bigger) {
   var scaleControl = pictureUploadOverlay.querySelector('.scale__control--value');
   var currentScale = parseInt(scaleControl.value, 10);
 
-  if (bigger && currentScale < 100) {
+  if (bigger && currentScale < MAX_PICTURE_SIZE) {
     currentScale += SCALE_STEP;
-  } else if (!bigger && currentScale > 0) {
+  } else if (!bigger && currentScale > MIN_PICTURE_SIZE) {
     currentScale -= SCALE_STEP;
   }
 
