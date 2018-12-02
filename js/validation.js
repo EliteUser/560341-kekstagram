@@ -61,7 +61,9 @@ var hashtagsTextFieldInputHandler = function (evt) {
   var userInputArray = userInput.split(' ');
   var validInput = validateHashtags(userInput);
 
-  if (!validInput && userInputArray.length > MAX_HASHTAGS) {
+  if (!userInput) {
+    target.setCustomValidity('');
+  } else if (!validInput && userInputArray.length > MAX_HASHTAGS) {
     target.setCustomValidity('Нельзя указать больше пяти хэш-тегов');
   } else if (hasDuplicates(userInput.toLowerCase().split(' '))) {
     target.setCustomValidity('Хэш-теги нечувствительны к регистру и не могут быть использованы дважды.');
