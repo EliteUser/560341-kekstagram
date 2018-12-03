@@ -1,127 +1,129 @@
 'use strict';
 
-var ESC_KEYCODE = 27;
+(function () {
 
-var FILE_TYPES = [
-  'image/jpeg',
-  'image/pjpeg',
-  'image/png',
-];
 
-var uploadFileButton = document.querySelector('#upload-file');
-var pictureUploadOverlay = document.querySelector('.img-upload__overlay');
-var uploadCancelButton = document.querySelector('#upload-cancel');
-var picturePreview = document.querySelector('.img-upload__preview');
+  var FILE_TYPES = [
+    'image/jpeg',
+    'image/pjpeg',
+    'image/png',
+  ];
 
-/* Проверка типа файла */
+  var uploadFileButton = document.querySelector('#upload-file');
+  var pictureUploadOverlay = document.querySelector('.img-upload__overlay');
+  var uploadCancelButton = document.querySelector('#upload-cancel');
+  var picturePreview = document.querySelector('.img-upload__preview');
 
-var validFileType = function (file) {
-  for (var i = 0; i < FILE_TYPES.length; i++) {
-    if (file.type === FILE_TYPES[i]) {
-      return true;
+  /* Проверка типа файла */
+
+  var validFileType = function (file) {
+    for (var i = 0; i < FILE_TYPES.length; i++) {
+      if (file.type === FILE_TYPES[i]) {
+        return true;
+      }
     }
-  }
-  return false;
-};
+    return false;
+  };
 
-/* Очистка превью изображения */
+  /* Очистка превью изображения */
 
-var clearPicturePreview = function () {
-  while (picturePreview.firstElementChild) {
-    picturePreview.removeChild(picturePreview.firstElementChild);
-  }
-};
+  var clearPicturePreview = function () {
+    while (picturePreview.firstElementChild) {
+      picturePreview.removeChild(picturePreview.firstElementChild);
+    }
+  };
 
-/* Загрузка изображения и показ оверлея */
+  /* Загрузка изображения и показ оверлея */
 
-var uploadPicture = function (file) {
-  if (validFileType(file)) {
-    clearPicturePreview();
+  var uploadPicture = function (file) {
+    if (validFileType(file)) {
+      clearPicturePreview();
 
-    var uploadedImg = document.createElement('img');
-    var reader = new FileReader();
+      var uploadedImg = document.createElement('img');
+      var reader = new FileReader();
 
-    uploadedImg.file = file;
-    uploadedImg.alt = 'Предварительный просмотр фотографии';
+      uploadedImg.file = file;
+      uploadedImg.alt = 'Предварительный просмотр фотографии';
 
-    reader.onload = (function (img) {
-      return function (e) {
-        img.src = e.target.result;
-      };
-    })(uploadedImg);
-    reader.readAsDataURL(file);
+      reader.onload = (function (img) {
+        return function (evt) {
+          img.src = evt.target.result;
+        };
+      })(uploadedImg);
+      reader.readAsDataURL(file);
 
-    picturePreview.appendChild(uploadedImg);
-  } else {
-    clearPicturePreview();
-    showErrorMessage();
-  }
-};
+      picturePreview.appendChild(uploadedImg);
+    } else {
+      clearPicturePreview();
+      showErrorMessage();
+    }
+  };
 
-var showPictureOverlay = function () {
-  pictureUploadOverlay.classList.remove('hidden');
-  uploadFileButton.removeEventListener('change', fileLoadHandler);
+  var showPictureOverlay = function () {
+    pictureUploadOverlay.classList.remove('hidden');
+    uploadFileButton.removeEventListener('change', fileLoadHandler);
 
-  uploadCancelButton.addEventListener('click', cancelBtnClickHandler);
-  document.addEventListener('keydown', cancelButtonEscHandler);
-};
+    uploadCancelButton.addEventListener('click', cancelBtnClickHandler);
+    document.addEventListener('keydown', cancelButtonEscHandler);
+  };
 
-var hidePictureOverlay = function () {
-  pictureUploadOverlay.classList.add('hidden');
-  uploadCancelButton.removeEventListener('click', cancelBtnClickHandler);
-  document.removeEventListener('keydown', cancelButtonEscHandler);
+  var hidePictureOverlay = function () {
+    pictureUploadOverlay.classList.add('hidden');
+    uploadCancelButton.removeEventListener('click', cancelBtnClickHandler);
+    document.removeEventListener('keydown', cancelButtonEscHandler);
 
-  uploadFileButton.value = '';
-  uploadFileButton.addEventListener('change', fileLoadHandler);
-};
+    uploadFileButton.value = '';
+    uploadFileButton.addEventListener('change', fileLoadHandler);
+  };
 
-var fileLoadHandler = function () {
-  var currentFile = uploadFileButton.files[0];
-  showPictureOverlay();
-  uploadPicture(currentFile);
-};
+  var fileLoadHandler = function () {
+    var currentFile = uploadFileButton.files[0];
+    showPictureOverlay();
+    uploadPicture(currentFile);
+  };
 
-var cancelBtnClickHandler = function () {
-  hidePictureOverlay();
-};
-
-var cancelButtonEscHandler = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  var cancelBtnClickHandler = function () {
     hidePictureOverlay();
-  }
-};
+  };
 
-/* Показ / сокрытие сообщения о загрузке неверного файла */
+  var cancelButtonEscHandler = function (evt) {
+    window.util.isEscEvent(evt, hidePictureOverlay);
+  };
 
-var errorMessageOkClickHandler = function () {
-  hideErrorMessage();
-  uploadFileButton.click();
-};
+  /* Показ / сокрытие сообщения о загрузке неверного файла */
 
-var errorMessageCancelClickHandler = function () {
-  hideErrorMessage();
-};
+  var errorMessageOkClickHandler = function () {
+    hideErrorMessage();
+    uploadFileButton.click();
+  };
 
-var showErrorMessage = function () {
-  var errorMessageElement = document.querySelector('#wrong')
-    .content
-    .querySelector('.error')
-    .cloneNode(true);
-  var errorMessageOkButton = errorMessageElement.querySelector('#load');
-  var errorMessageCancelButton = errorMessageElement.querySelector('#cancel');
-  pictureUploadOverlay.appendChild(errorMessageElement);
+  var errorMessageCancelClickHandler = function () {
+    hideErrorMessage();
+  };
 
-  errorMessageOkButton.addEventListener('click', errorMessageOkClickHandler);
-  errorMessageCancelButton.addEventListener('click', errorMessageCancelClickHandler);
-};
+  var showErrorMessage = function () {
+    var errorMessageElement = document.querySelector('#wrong')
+      .content
+      .querySelector('.error')
+      .cloneNode(true);
+    var errorMessageOkButton = errorMessageElement.querySelector('#load');
+    var errorMessageCancelButton = errorMessageElement.querySelector('#cancel');
+    pictureUploadOverlay.appendChild(errorMessageElement);
 
-var hideErrorMessage = function () {
-  var message = pictureUploadOverlay.querySelector('.error');
+    errorMessageOkButton.addEventListener('click', errorMessageOkClickHandler);
+    errorMessageCancelButton.addEventListener('click', errorMessageCancelClickHandler);
+  };
 
-  message.querySelector('#load').removeEventListener('click', errorMessageOkClickHandler);
-  message.querySelector('#cancel').removeEventListener('click', errorMessageCancelClickHandler);
-  pictureUploadOverlay.removeChild(message);
-  hidePictureOverlay();
-};
+  var hideErrorMessage = function () {
+    var message = pictureUploadOverlay.querySelector('.error');
 
-uploadFileButton.addEventListener('change', fileLoadHandler);
+    message.querySelector('#load').removeEventListener('click', errorMessageOkClickHandler);
+    message.querySelector('#cancel').removeEventListener('click', errorMessageCancelClickHandler);
+    pictureUploadOverlay.removeChild(message);
+    hidePictureOverlay();
+  };
+
+  uploadFileButton.addEventListener('change', fileLoadHandler);
+
+
+})();
