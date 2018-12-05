@@ -47,8 +47,6 @@
     bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
     bigPictureElement.querySelector('.social__caption').textContent = picture.description;
     renderBigPictureComments(picture.comments);
-
-    bigPictureElement.querySelector('.social__footer-text').focus();
   };
 
   /* Обработчики событий - открытие / закрытие полноэкранного изображения */
