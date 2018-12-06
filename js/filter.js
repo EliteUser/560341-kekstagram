@@ -16,19 +16,40 @@
 
   /* Добавление и переключения фильтров на изображении */
 
+  var resetFilter = function () {
+    var picture = pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild;
+    var hashtagsTextField = document.querySelector('.text__hashtags');
+    var descriptionTextField = document.querySelector('.text__description');
+
+    hashtagsTextField.value = '';
+    descriptionTextField.value = '';
+
+    effectLevelInput.setAttribute('value', FILTER_DEFAULT_VALUE);
+    effectLevelPin.style.left = FILTER_DEFAULT_VALUE + '%';
+    effectLevelDepth.style.width = FILTER_DEFAULT_VALUE + '%';
+
+    picture.style = '';
+    pictureEffectsButtons[0].checked = true;
+    addPictureFilter('none');
+    window.scale.resetScale();
+  };
+
   var addPictureFilter = function (filterName) {
     var picture = pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild;
     var filterLevel = pictureUploadOverlay.querySelector('.effect-level');
+    var filterLevelInput = filterLevel.querySelector('.effect-level__value');
 
     if (filterName === 'none') {
       filterLevel.classList.add('hidden');
+      filterLevelInput.setAttribute('disabled', true);
       picture.classList = '';
       picture.style.filter = '';
     } else {
+      filterLevel.classList.remove('hidden');
+      filterLevelInput.setAttribute('disabled', false);
       picture.classList = '';
       picture.style.filter = '';
       picture.classList.add('effects__preview--' + filterName);
-      filterLevel.classList.remove('hidden');
     }
   };
 
@@ -45,7 +66,7 @@
     });
   });
 
-  /* Слайдер изменения глубины эффекта */
+  /* Изменение глубины эффекта */
 
   var setPictureEffect = function (effect, level) {
     var cssEffect;
@@ -97,7 +118,9 @@
 
   window.slider.initSlider(changeEffectLevel);
 
+  window.filter = {
+    resetFilter: resetFilter,
+  };
+
 
 })();
-
-

@@ -2,6 +2,7 @@
 
 (function () {
 
+
   var initSlider = function (action) {
 
     var pictureUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -59,10 +60,11 @@
 
     effectLevelPin.addEventListener('mousedown', pinMouseDownHandler);
 
-  }
-  ;
+  };
+
   window.slider = {
     initSlider: initSlider,
   };
+
 
 })();

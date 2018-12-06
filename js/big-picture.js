@@ -3,6 +3,8 @@
 (function () {
 
 
+  var COMMENTS_QUANTITY = 5;
+
   /* Полноэкранный показ изображения */
 
   var bigPictureElement = document.querySelector('.big-picture');
@@ -22,8 +24,8 @@
   var renderBigPictureComment = function (comment) {
     var commentElement = pictureCommentTemplate.cloneNode(true);
 
-    commentElement.querySelector('.social__picture').src = 'img/avatar-' + window.util.getRandomInteger(1, 6) + '.svg';
-    commentElement.querySelector('.social__text').textContent = comment;
+    commentElement.querySelector('.social__picture').src = comment.avatar;
+    commentElement.querySelector('.social__text').textContent = comment.message;
 
     return commentElement;
   };
@@ -31,8 +33,10 @@
   var renderBigPictureComments = function (comments) {
     clearBigPictureComments();
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < comments.length; i++) {
-      fragment.appendChild(renderBigPictureComment(comments[i]));
+    for (var i = 0; i < COMMENTS_QUANTITY; i++) {
+      if (comments[i]) {
+        fragment.appendChild(renderBigPictureComment(comments[i]));
+      }
     }
 
     bigPictureCommentsList.appendChild(fragment);
@@ -40,7 +44,6 @@
 
   var renderBigPictureElement = function (picture) {
     bigPictureElement.querySelector('.social__comment-count').classList.add('visually-hidden');
-    bigPictureElement.querySelector('.comments-loader').classList.add('visually-hidden');
 
     bigPictureElement.querySelector('.big-picture__img').firstElementChild.src = picture.url;
     bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
