@@ -45,6 +45,13 @@
 
   /* Показ / скрытие сообщения о неудачной отправке формы */
 
+  var pictureUploadOverlay = document.querySelector('.img-upload__overlay');
+
+  var resetOverlay = function () {
+    window.upload.hideOverlay();
+    pictureUploadOverlay.style = '';
+  };
+
   var showErrorMessage = function () {
     var errorMessageElement = document.querySelector('#error')
       .content
@@ -71,22 +78,25 @@
   };
 
   var errorMessageAgainClickHandler = function () {
-    // А что он делать то должен? В ТЗ вроде ничего не сказано. Пусть пока просто закрывает окно с ошибкой
+    pictureUploadOverlay.style = '';
     hideErrorMessage();
   };
 
   var errorMessageUploadClickHandler = function () {
     hideErrorMessage();
+    resetOverlay();
     document.querySelector('#upload-file').click();
   };
 
   var errorMessageEscHandler = function (evt) {
     window.util.isEscEvent(evt, hideErrorMessage);
+    resetOverlay();
   };
 
   var errorMessageOverlayHandler = function (evt) {
     if (evt.target.classList.contains('error')) {
       hideErrorMessage();
+      resetOverlay();
     }
   };
 
@@ -100,7 +110,8 @@
   };
 
   var formSubmitErrorHandler = function () {
-    window.upload.hideOverlay();
+    pictureUploadOverlay.style.opacity = 0;
+    pictureUploadOverlay.style.zIndex = -1;
     showErrorMessage();
   };
 
