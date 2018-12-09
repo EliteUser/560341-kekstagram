@@ -13,6 +13,11 @@
   var scaleUpButton = pictureUploadOverlay.querySelector('.scale__control--bigger');
   var scaleDownButton = pictureUploadOverlay.querySelector('.scale__control--smaller');
 
+  var resetScale = function () {
+    pictureUploadOverlay.querySelector('.scale__control--value').value = MAX_PICTURE_SIZE + '%';
+    pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild.style.transform = '';
+  };
+
   var scaleImage = function (bigger) {
     var picture = pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild;
     var scaleControl = pictureUploadOverlay.querySelector('.scale__control--value');
@@ -25,7 +30,7 @@
     }
 
     scaleControl.value = currentScale + '%';
-    picture.style = 'transform: scale(' + (currentScale / 100) + ')';
+    picture.style.transform = 'scale(' + (currentScale / 100) + ')';
   };
 
   var scaleUpButtonClickHandler = function () {
@@ -38,6 +43,10 @@
 
   scaleUpButton.addEventListener('click', scaleUpButtonClickHandler);
   scaleDownButton.addEventListener('click', scaleDownButtonClickHandler);
+
+  window.scale = {
+    resetScale: resetScale,
+  };
 
 
 })();

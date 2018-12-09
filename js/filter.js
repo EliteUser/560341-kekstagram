@@ -16,19 +16,40 @@
 
   /* Добавление и переключения фильтров на изображении */
 
+  var resetFilter = function () {
+    var picture = pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild;
+    var hashtagsTextField = document.querySelector('.text__hashtags');
+    var descriptionTextField = document.querySelector('.text__description');
+
+    hashtagsTextField.value = '';
+    descriptionTextField.value = '';
+
+    effectLevelInput.setAttribute('value', FILTER_DEFAULT_VALUE);
+    effectLevelPin.style.left = FILTER_DEFAULT_VALUE + '%';
+    effectLevelDepth.style.width = FILTER_DEFAULT_VALUE + '%';
+
+    picture.style = '';
+    pictureEffectsButtons[0].checked = true;
+    addPictureFilter('none');
+    window.scale.resetScale();
+  };
+
   var addPictureFilter = function (filterName) {
     var picture = pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild;
     var filterLevel = pictureUploadOverlay.querySelector('.effect-level');
+    var filterLevelInput = filterLevel.querySelector('.effect-level__value');
 
     if (filterName === 'none') {
       filterLevel.classList.add('hidden');
+      filterLevelInput.setAttribute('disabled', true);
       picture.classList = '';
-      picture.style = '';
+      picture.style.filter = '';
     } else {
-      picture.classList = '';
-      picture.style = '';
-      picture.classList.add('effects__preview--' + filterName);
       filterLevel.classList.remove('hidden');
+      filterLevelInput.setAttribute('disabled', false);
+      picture.classList = '';
+      picture.style.filter = '';
+      picture.classList.add('effects__preview--' + filterName);
     }
   };
 
@@ -45,9 +66,9 @@
     });
   });
 
-  /* Слайдер изменения глубины эффекта */
+  /* Изменение глубины эффекта */
 
-  var changeEffectLevel = function (effect, level) {
+  var setPictureEffect = function (effect, level) {
     var cssEffect;
     switch (effect) {
       case 'chrome':
@@ -81,67 +102,25 @@
     return pictureActiveEffect;
   };
 
-  var pinMouseDownHandler = function (evt) {
-    evt.preventDefault();
+  var changeEffectLevel = function (target, position) {
+    var userPicture = pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild;
+    var lineWidth = effectLevelLine.offsetWidth;
+    var effectLevel = (position / lineWidth) * 100;
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY,
-    };
+    effectLevelInput.setAttribute('value', effectLevel);
+    effectLevelInput.value = effectLevel;
 
-    var pinMouseMoveHandler = function (moveEvt) {
-      var target = effectLevelPin;
-      var lineWidth = effectLevelLine.offsetWidth;
+    effectLevelPin.style.left = effectLevel + '%';
+    effectLevelDepth.style.width = effectLevel + '%';
 
-      moveEvt.preventDefault();
-
-      var shift = {
-        x: moveEvt.clientX - startCoords.x,
-        y: moveEvt.clientY - startCoords.y,
-      };
-
-      var endCoords = {
-        x: target.offsetLeft + shift.x,
-        y: target.offsetTop + shift.y,
-      };
-
-      if (endCoords.x < 0) {
-        endCoords.x = 0;
-      } else if (endCoords.x > lineWidth) {
-        endCoords.x = lineWidth;
-      }
-
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY,
-      };
-
-      var userPicture = pictureUploadOverlay.querySelector('.img-upload__preview').firstElementChild;
-      var effectLevel = (endCoords.x / lineWidth) * 100;
-
-      effectLevelInput.setAttribute('value', effectLevel);
-      effectLevelInput.value = effectLevel;
-
-      target.style.left = effectLevel + '%';
-      effectLevelDepth.style.width = effectLevel + '%';
-
-      userPicture.style.filter = changeEffectLevel(getActiveEffect(), effectLevel);
-    };
-
-    var pinMouseUpHandler = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', pinMouseMoveHandler);
-      document.removeEventListener('mouseup', pinMouseUpHandler);
-    };
-
-    document.addEventListener('mousemove', pinMouseMoveHandler);
-    document.addEventListener('mouseup', pinMouseUpHandler);
+    userPicture.style.filter = setPictureEffect(getActiveEffect(), effectLevel);
   };
 
-  effectLevelPin.addEventListener('mousedown', pinMouseDownHandler);
+  window.slider.initSlider(changeEffectLevel);
+
+  window.filter = {
+    resetFilter: resetFilter,
+  };
 
 
 })();
-
-

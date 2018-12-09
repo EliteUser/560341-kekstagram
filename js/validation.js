@@ -29,12 +29,18 @@
     var userInputArray = userInput.split(' ');
     var validInput = validateHashtags(userInput);
 
+    if (!validInput) {
+      target.style.borderColor = 'red';
+    }
+
     if (!userInput) {
       target.setCustomValidity('');
+      target.style.borderColor = '#eeeeee';
     } else if (!validInput && userInputArray.length > MAX_HASHTAGS) {
       target.setCustomValidity('Нельзя указать больше пяти хэш-тегов');
     } else if (window.util.hasDuplicates(userInput.toLowerCase().split(' '))) {
       target.setCustomValidity('Хэш-теги нечувствительны к регистру и не могут быть использованы дважды.');
+      target.style.borderColor = 'red';
     } else if (!validInput) {
 
       for (var i = 0; i < userInputArray.length; i++) {
@@ -54,6 +60,7 @@
 
     } else {
       target.setCustomValidity('');
+      target.style.borderColor = '#eeeeee';
     }
   };
 

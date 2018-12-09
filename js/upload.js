@@ -68,6 +68,7 @@
   };
 
   var hidePictureOverlay = function () {
+    window.filter.resetFilter();
     pictureUploadOverlay.classList.add('hidden');
     uploadCancelButton.removeEventListener('click', cancelBtnClickHandler);
     document.removeEventListener('keydown', cancelButtonEscHandler);
@@ -124,6 +125,10 @@
   };
 
   uploadFileButton.addEventListener('change', fileLoadHandler);
+
+  window.upload = {
+    hideOverlay: hidePictureOverlay,
+  };
 
 
 })();
