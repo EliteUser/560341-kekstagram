@@ -3,7 +3,7 @@
 (function () {
 
 
-  var COMMENTS_QUANTITY = 5;
+  var COMMENTS_ADD_STEP = 5;
 
   /* Полноэкранный показ изображения */
 
@@ -31,25 +31,33 @@
   };
 
   var renderBigPictureComments = function (comments) {
-    clearBigPictureComments();
+    var commentsLoader = bigPictureElement.querySelector('.social__comments-loader');
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < COMMENTS_QUANTITY; i++) {
+    var currentCommentsQuantity = bigPictureCommentsList.children.length;
+
+    commentsLoader.classList.remove('visually-hidden');
+
+    for (var i = currentCommentsQuantity; i < currentCommentsQuantity + COMMENTS_ADD_STEP; i++) {
       if (comments[i]) {
         fragment.appendChild(renderBigPictureComment(comments[i]));
+      } else {
+        commentsLoader.classList.add('visually-hidden');
+        break;
       }
     }
 
+    bigPictureElement.querySelector('#comments-current').textContent = i;
     bigPictureCommentsList.appendChild(fragment);
   };
 
   var renderBigPictureElement = function (picture) {
-    bigPictureElement.querySelector('.social__comment-count').classList.add('visually-hidden');
-
     bigPictureElement.querySelector('.big-picture__img').firstElementChild.src = picture.url;
     bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
     bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
     bigPictureElement.querySelector('.social__caption').textContent = picture.description;
+    clearBigPictureComments();
     renderBigPictureComments(picture.comments);
+    window.comments.addCommentsLoader(picture);
   };
 
   /* Обработчики событий - открытие / закрытие полноэкранного изображения */
@@ -77,10 +85,11 @@
   };
 
   var bigPictureCloseButtonEscHandler = function (evt) {
-    window.util(evt, hideBigPicture);
+    window.util.isEscEvent(evt, hideBigPicture);
   };
 
   window.bigPicture = {
+    renderBigPictureComments: renderBigPictureComments,
     showBigPicture: showBigPicture,
   };
 

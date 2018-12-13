@@ -94,11 +94,12 @@
     var pictureActiveEffect;
     var pictureEffects = pictureUploadOverlay.querySelectorAll('.effects__radio');
 
-    for (var i = 0; i < pictureEffects.length; i++) {
-      if (pictureEffects[i].checked === true) {
-        pictureActiveEffect = pictureEffects[i].value;
+    pictureEffects.forEach(function (elem) {
+      if (elem.checked) {
+        pictureActiveEffect = elem.value;
       }
-    }
+    });
+
     return pictureActiveEffect;
   };
 
