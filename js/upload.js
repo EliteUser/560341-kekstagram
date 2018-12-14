@@ -45,13 +45,11 @@
       uploadedImg.file = file;
       uploadedImg.alt = 'Предварительный просмотр фотографии';
 
-      reader.onload = (function (img) {
-        return function (evt) {
-          img.src = evt.target.result;
-        };
-      })(uploadedImg);
-      reader.readAsDataURL(file);
+      reader.addEventListener('load', function () {
+        uploadedImg.src = reader.result;
+      });
 
+      reader.readAsDataURL(file);
       picturePreview.appendChild(uploadedImg);
     } else {
       clearPicturePreview();

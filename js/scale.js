@@ -3,7 +3,7 @@
 (function () {
 
 
-  var MIN_PICTURE_SIZE = 0;
+  var MIN_PICTURE_SIZE = 25;
   var MAX_PICTURE_SIZE = 100;
   var SCALE_STEP = 25;
 

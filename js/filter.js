@@ -53,9 +53,8 @@
     }
   };
 
-  pictureEffectPreviews.forEach(function (elem, index) {
-    var filterName = pictureEffectsButtons[index].value;
-    elem.addEventListener('click', function () {
+  var pictureEffectClickHandler = function (filterName, index) {
+    return function () {
       pictureEffectsButtons[index].checked = true;
 
       effectLevelInput.setAttribute('value', FILTER_DEFAULT_VALUE);
@@ -63,7 +62,13 @@
       effectLevelDepth.style.width = FILTER_DEFAULT_VALUE + '%';
 
       addPictureFilter(filterName);
-    });
+    };
+  };
+
+  pictureEffectPreviews.forEach(function (elem, index) {
+    var filterName = pictureEffectsButtons[index].value;
+    elem.addEventListener('click', pictureEffectClickHandler(filterName, index));
+    pictureEffectsButtons[index].addEventListener('focus', pictureEffectClickHandler(filterName, index));
   });
 
   /* Изменение глубины эффекта */
