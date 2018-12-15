@@ -7,8 +7,8 @@
 
   /* Фильтрация (сортировка) изображений от других пользователей */
 
-  var picturesFilterElement = document.querySelector('.img-filters');
-  var pictureFilterButtons = picturesFilterElement.querySelectorAll('.img-filters__button');
+  var picturesFilter = document.querySelector('.img-filters');
+  var pictureFilterButtons = picturesFilter.querySelectorAll('.img-filters__button');
 
   var filterContainerClickHandler = function (evt) {
     var target = evt.target;
@@ -19,7 +19,7 @@
     target.classList.add('img-filters__button--active');
   };
 
-  picturesFilterElement.addEventListener('click', filterContainerClickHandler);
+  picturesFilter.addEventListener('click', filterContainerClickHandler);
 
   /* Фильтры сортировки */
 
@@ -64,7 +64,7 @@
   };
 
   var showPicturesSort = function () {
-    picturesFilterElement.classList.remove('img-filters--inactive');
+    picturesFilter.classList.remove('img-filters--inactive');
     pictureFilterButtons.forEach(function (elem) {
       addFilterButtonClickHandler(elem, window.debounce(SortFilter[elem.id]));
     });

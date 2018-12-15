@@ -26,7 +26,7 @@
     'Вот это тачка!',
   ];
 
-  var createPictureElement = function (url, likes, comments, description, index) {
+  var createPicture = function (url, likes, comments, description, index) {
     return {url: url, likes: likes, comments: comments, description: description, index: index};
   };
 
@@ -47,7 +47,7 @@
       var pictureLikes = window.util.getRandomInteger(LIKES_MIN_QUANTITY, LIKES_MAX_QUANTITY);
       var pictureComments = generatePictureComments(COMMENTS);
       var pictureDescription = window.util.getRandomArrayElement(DESCRIPTIONS);
-      data.push(createPictureElement(pictureURL, pictureLikes, pictureComments, pictureDescription, pictureIndex));
+      data.push(createPicture(pictureURL, pictureLikes, pictureComments, pictureDescription, pictureIndex));
     }
     return data;
   };
