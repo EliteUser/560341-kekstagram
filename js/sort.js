@@ -27,11 +27,11 @@
 
   var showPopularPictures = function () {
     window.pictures.removeUserPictures();
-    window.pictures.renderUserPictures(window.data.picturesData);
+    window.pictures.renderUserPictures(window.pictures.data);
   };
 
   var showNewPictures = function () {
-    var userPictures = window.data.picturesData.slice();
+    var userPictures = window.pictures.data.slice();
     var newPictures = [];
 
     for (var i = 0; i < NEW_PICTURES_QUANTITY; i++) {
@@ -45,7 +45,7 @@
   };
 
   var showDiscussedPictures = function () {
-    var discussedPictures = window.data.picturesData.slice().sort(function (a, b) {
+    var discussedPictures = window.pictures.data.slice().sort(function (a, b) {
       return b.comments.length - a.comments.length;
     });
 

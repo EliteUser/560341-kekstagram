@@ -67,7 +67,7 @@
     bigPicture.classList.remove('hidden');
 
     var pictureIndex = target.dataset.index;
-    renderBigPicture(window.data.picturesData[pictureIndex]);
+    renderBigPicture(window.pictures.data[pictureIndex]);
 
     bigPictureCloseButton.addEventListener('click', bigPictureCloseButtonClickHandler);
     document.addEventListener('keydown', bigPictureCloseButtonEscHandler);

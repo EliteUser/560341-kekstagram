@@ -58,7 +58,7 @@
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
                   <fieldset class="img-upload__effect-level effect-level hidden">
-                    <input class="effect-level__value" type="number" name="effect-level" value="20">
+                    <input class="effect-level__value" type="number" name="effect-level">
                     <div class="effect-level__line">
                       <div class="effect-level__pin" tabindex="0">Кнопка изменения глубины эффекта фотографии</div>
                       <div class="effect-level__depth">Глубина эффекта фотографии</div>
@@ -154,7 +154,9 @@
           </div>
 
           <!-- Комментарии к изображению -->
-          <div class="social__comment-count"><span id="comments-current">5</span> из <span class="comments-count">125</span> комментариев</div>
+          <div class="social__comment-count"><span id="comments-current">5</span> из
+            <span class="comments-count">125</span> комментариев
+          </div>
           <ul class="social__comments">
             <li class="social__comment">
               <img class="social__picture" src="img/avatar-4.svg" alt="Аватар комментатора фотографии" width="35" height="35">
@@ -259,6 +261,16 @@
     </section>
   </template>
 
+  <!-- Сообщение о неудачной загрузке изображений пользователей -->
+  <template id="pictures-error">
+    <section class="error">
+      <div class="error__inner">
+        <h2 class="error__title">Ошибка при загрузке изображений</h2>
+        <button type="button" class="error__button" id="close">Закрыть</button>
+      </div>
+    </section>
+  </template>
+
   <!-- Экран загрузки изображения -->
   <template id="messages">
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
@@ -266,7 +278,6 @@
 
   <script src="js/util.js"></script>
   <script src="js/backend.js"></script>
-  <script src="js/data.js"></script>
   <script src="js/pictures.js"></script>
   <script src="js/big-picture.js"></script>
   <script src="js/debounce.js"></script>

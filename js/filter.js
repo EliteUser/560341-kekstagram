@@ -29,14 +29,16 @@
     hashtagsTextField.value = '';
     descriptionTextField.value = '';
 
-    effectLevelInput.setAttribute('value', FILTER_DEFAULT_VALUE);
+    effectLevelInput.value = FILTER_DEFAULT_VALUE;
     effectLevelPin.style.left = FILTER_DEFAULT_VALUE + '%';
     effectLevelDepth.style.width = FILTER_DEFAULT_VALUE + '%';
 
-    picture.style = '';
-    pictureEffectsButtons[0].checked = true;
-    addPictureFilter('none');
-    window.scale.resetScale();
+    if (picture) {
+      picture.style = '';
+      pictureEffectsButtons[0].checked = true;
+      addPictureFilter('none');
+      window.scale.resetScale();
+    }
   };
 
   var addPictureFilter = function (filterName) {
@@ -46,12 +48,12 @@
 
     if (filterName === 'none') {
       filterLevel.classList.add('hidden');
-      filterLevelInput.setAttribute('disabled', true);
+      filterLevelInput.disabled = true;
       picture.classList = '';
       picture.style.filter = '';
     } else {
       filterLevel.classList.remove('hidden');
-      filterLevelInput.setAttribute('disabled', false);
+      filterLevelInput.disabled = false;
       picture.classList = '';
       picture.style.filter = '';
       picture.classList.add('effects__preview--' + filterName);
@@ -62,7 +64,7 @@
     return function () {
       pictureEffectsButtons[index].checked = true;
 
-      effectLevelInput.setAttribute('value', FILTER_DEFAULT_VALUE);
+      effectLevelInput.value = FILTER_DEFAULT_VALUE;
       effectLevelPin.style.left = FILTER_DEFAULT_VALUE + '%';
       effectLevelDepth.style.width = FILTER_DEFAULT_VALUE + '%';
 
@@ -118,9 +120,7 @@
     var lineWidth = effectLevelLine.offsetWidth;
     var effectLevel = (position / lineWidth) * 100;
 
-    effectLevelInput.setAttribute('value', effectLevel);
-    effectLevelInput.value = effectLevel;
-
+    effectLevelInput.value = parseInt(effectLevel, 10);
     effectLevelPin.style.left = effectLevel + '%';
     effectLevelDepth.style.width = effectLevel + '%';
 

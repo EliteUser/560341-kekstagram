@@ -20,43 +20,37 @@
     };
   };
 
-  var load = function (onLoad, onError) {
-    var xhrLoadHandler = function () {
+  var xhrHandler = function (xhr, onLoad, onError, message) {
+    return function () {
       if (xhr.status === XHR_STATUS_OK) {
         onLoad(xhr.response);
       } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText + '\n Не удалось загрузить данные');
+        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText + '\n ' + message);
       }
     };
+  };
 
+  var createXhrRequest = function (onLoad, onError, message) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.timeout = XHR_TIMEOUT;
 
-    xhr.addEventListener('load', xhrLoadHandler);
+    xhr.addEventListener('load', xhrHandler(xhr, onLoad, onError, message));
     xhr.addEventListener('error', xhrErrorHandler(onError));
     xhr.addEventListener('timeout', xhrTimeoutHandler(xhr, onError));
+
+    return xhr;
+  };
+
+  var load = function (onLoad, onError) {
+    var xhr = createXhrRequest(onLoad, onError, 'Не удалось загрузить данные');
 
     xhr.open('GET', DOWNLOAD_URL);
     xhr.send();
   };
 
   var save = function (data, onLoad, onError) {
-    var xhrLoadHandler = function () {
-      if (xhr.status === XHR_STATUS_OK) {
-        onLoad(xhr.response);
-      } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText + '\n Не удалось отправить данные');
-      }
-    };
-
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-    xhr.timeout = XHR_TIMEOUT;
-
-    xhr.addEventListener('load', xhrLoadHandler);
-    xhr.addEventListener('error', xhrErrorHandler(onError));
-    xhr.addEventListener('timeout', xhrTimeoutHandler(xhr, onError));
+    var xhr = createXhrRequest(onLoad, onError, 'Не удалось отправить данные');
 
     xhr.open('POST', UPLOAD_URL);
     xhr.send(data);

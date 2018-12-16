@@ -49,8 +49,8 @@
   userPicturesContainer.addEventListener('click', userPicturesContainerClickHandler);
 
   var renderPictures = function (data) {
-    window.data.picturesData = data;
-    window.data.picturesData.forEach(function (elem, index) {
+    window.pictures.data = data;
+    window.pictures.data.forEach(function (elem, index) {
       elem.index = index;
     });
 
@@ -58,7 +58,37 @@
     window.sort.showPicturesSort();
   };
 
-  window.backend.load(renderPictures);
+  /* Показ / скрытие сообщения о неудачной загрузке изображений пользователей */
+
+  var errorMessageCloseClickHandler = function () {
+    hideErrorMessage();
+  };
+
+  var errorMessageCloseEscHandler = function (evt) {
+    window.util.isEscEvent(evt, hideErrorMessage);
+  };
+
+  var showErrorMessage = function () {
+    var errorMessageElement = document.querySelector('#pictures-error')
+      .content
+      .querySelector('.error')
+      .cloneNode(true);
+    var errorMessageCloseButton = errorMessageElement.querySelector('#close');
+    userPicturesContainer.appendChild(errorMessageElement);
+
+    errorMessageCloseButton.addEventListener('click', errorMessageCloseClickHandler);
+    document.addEventListener('keydown', errorMessageCloseEscHandler);
+  };
+
+  var hideErrorMessage = function () {
+    var message = userPicturesContainer.querySelector('.error');
+
+    message.querySelector('#close').removeEventListener('click', errorMessageCloseClickHandler);
+    document.removeEventListener('keydown', errorMessageCloseEscHandler);
+    userPicturesContainer.removeChild(message);
+  };
+
+  window.backend.load(renderPictures, showErrorMessage);
 
   window.pictures = {
     removeUserPictures: removeUserPictures,
