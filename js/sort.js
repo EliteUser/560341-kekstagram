@@ -12,11 +12,13 @@
 
   var filterContainerClickHandler = function (evt) {
     var target = evt.target;
-    pictureFilterButtons.forEach(function (elem) {
-      elem.classList.remove('img-filters__button--active');
-    });
+    if (target.classList.contains('img-filters__button')) {
+      pictureFilterButtons.forEach(function (elem) {
+        elem.classList.remove('img-filters__button--active');
+      });
 
-    target.classList.add('img-filters__button--active');
+      target.classList.add('img-filters__button--active');
+    }
   };
 
   picturesFilter.addEventListener('click', filterContainerClickHandler);

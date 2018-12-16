@@ -4,6 +4,11 @@
 
 
   var FILTER_DEFAULT_VALUE = 100;
+  var FILTER_CHROME = 'chrome';
+  var FILTER_SEPIA = 'sepia';
+  var FILTER_MARVIN = 'marvin';
+  var FILTER_PHOBOS = 'phobos';
+  var FILTER_HEAT = 'heat';
 
   var pictureUploadOverlay = document.querySelector('.img-upload__overlay');
   var pictureEffectsButtons = pictureUploadOverlay.querySelectorAll('.effects__radio');
@@ -76,19 +81,19 @@
   var setPictureEffect = function (effect, level) {
     var cssEffect;
     switch (effect) {
-      case 'chrome':
+      case FILTER_CHROME:
         cssEffect = 'grayscale(' + level / 100 + ')';
         break;
-      case 'sepia':
+      case FILTER_SEPIA:
         cssEffect = 'sepia(' + level / 100 + ')';
         break;
-      case 'marvin':
+      case FILTER_MARVIN:
         cssEffect = 'invert(' + level + '%)';
         break;
-      case 'phobos':
+      case FILTER_PHOBOS:
         cssEffect = 'blur(' + 3 * level / 100 + 'px)';
         break;
-      case 'heat':
+      case FILTER_HEAT:
         cssEffect = 'brightness(' + ((2 * level / 100) + 1) + ')';
         break;
     }

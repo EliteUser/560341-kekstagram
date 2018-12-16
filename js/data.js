@@ -8,6 +8,8 @@
   var PICTURES_QUANTITY = 25;
   var LIKES_MIN_QUANTITY = 15;
   var LIKES_MAX_QUANTITY = 200;
+  var PICTURES_PATH = 'photos/';
+  var PICTURES_FORMAT = '.jpg';
 
   var COMMENTS = ['Всё отлично!',
     'В целом всё неплохо. Но не всё.',
@@ -43,7 +45,7 @@
     var data = [];
     for (var i = 0; i < PICTURES_QUANTITY; i++) {
       var pictureIndex = i;
-      var pictureURL = 'photos/' + (i + 1) + '.jpg';
+      var pictureURL = PICTURES_PATH + (i + 1) + PICTURES_FORMAT;
       var pictureLikes = window.util.getRandomInteger(LIKES_MIN_QUANTITY, LIKES_MAX_QUANTITY);
       var pictureComments = generatePictureComments(COMMENTS);
       var pictureDescription = window.util.getRandomArrayElement(DESCRIPTIONS);

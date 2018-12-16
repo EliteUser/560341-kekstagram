@@ -5,6 +5,8 @@
 
   var MAX_HASHTAGS = 5;
   var HASHTAG_MAXLENGTH = 20;
+  var BORDER_DEFAULT_COLOR = '#eeeeee';
+  var BORDER_ERROR_COLOR = 'red';
 
   /* Проверка хэштегов на соответствие (с использованием регулярного выражения) */
 
@@ -30,17 +32,17 @@
     var validInput = validateHashtags(userInput);
 
     if (!validInput) {
-      target.style.borderColor = 'red';
+      target.style.borderColor = BORDER_ERROR_COLOR;
     }
 
     if (!userInput) {
       target.setCustomValidity('');
-      target.style.borderColor = '#eeeeee';
+      target.style.borderColor = BORDER_DEFAULT_COLOR;
     } else if (!validInput && userInputArray.length > MAX_HASHTAGS) {
       target.setCustomValidity('Нельзя указать больше пяти хэш-тегов');
     } else if (window.util.hasDuplicates(userInput.toLowerCase().split(' '))) {
       target.setCustomValidity('Хэш-теги нечувствительны к регистру и не могут быть использованы дважды.');
-      target.style.borderColor = 'red';
+      target.style.borderColor = BORDER_ERROR_COLOR;
     } else if (!validInput) {
 
       for (var i = 0; i < userInputArray.length; i++) {
@@ -60,7 +62,7 @@
 
     } else {
       target.setCustomValidity('');
-      target.style.borderColor = '#eeeeee';
+      target.style.borderColor = BORDER_DEFAULT_COLOR;
     }
   };
 
