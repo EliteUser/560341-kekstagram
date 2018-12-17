@@ -10,24 +10,10 @@
   var picturesFilter = document.querySelector('.img-filters');
   var pictureFilterButtons = picturesFilter.querySelectorAll('.img-filters__button');
 
-  var filterContainerClickHandler = function (evt) {
-    var target = evt.target;
-    if (target.classList.contains('img-filters__button')) {
-      pictureFilterButtons.forEach(function (elem) {
-        elem.classList.remove('img-filters__button--active');
-      });
-
-      target.classList.add('img-filters__button--active');
-    }
-  };
-
-  picturesFilter.addEventListener('click', filterContainerClickHandler);
-
   /* Фильтры сортировки */
 
   var showPopularPictures = function () {
-    window.pictures.removeUserPictures();
-    window.pictures.renderUserPictures(window.pictures.data);
+    return window.pictures.data;
   };
 
   var showNewPictures = function () {
@@ -40,17 +26,13 @@
       userPictures.splice(index, 1);
     }
 
-    window.pictures.removeUserPictures();
-    window.pictures.renderUserPictures(newPictures);
+    return newPictures;
   };
 
   var showDiscussedPictures = function () {
-    var discussedPictures = window.pictures.data.slice().sort(function (a, b) {
+    return window.pictures.data.slice().sort(function (a, b) {
       return b.comments.length - a.comments.length;
     });
-
-    window.pictures.removeUserPictures();
-    window.pictures.renderUserPictures(discussedPictures);
   };
 
   var SortFilter = {
@@ -59,18 +41,42 @@
     'filter-discussed': showDiscussedPictures,
   };
 
-  /* Показ блока сортировки и добавление обработчиков */
+  var sortPictures = function (filter) {
+    var filteredPictures = SortFilter[filter]();
 
-  var addFilterButtonClickHandler = function (button, handler) {
-    button.addEventListener('click', handler);
+    window.pictures.removeUserPictures();
+    window.pictures.renderUserPictures(filteredPictures);
   };
+
+  /* Показ блока сортировки и добавление обработчиков */
 
   var showPicturesSort = function () {
     picturesFilter.classList.remove('img-filters--inactive');
-    pictureFilterButtons.forEach(function (elem) {
-      addFilterButtonClickHandler(elem, window.debounce(SortFilter[elem.id]));
-    });
   };
+
+  var filterContainerClickHandler = function (evt) {
+    var target = evt.target;
+    var currentFilter;
+
+    pictureFilterButtons.forEach(function (elem) {
+      if (elem.classList.contains('img-filters__button--active')) {
+        currentFilter = elem.id;
+      }
+    });
+
+    if (currentFilter !== target.id) {
+      if (target.classList.contains('img-filters__button')) {
+        pictureFilterButtons.forEach(function (elem) {
+          elem.classList.remove('img-filters__button--active');
+        });
+
+        target.classList.add('img-filters__button--active');
+        sortPictures(target.id);
+      }
+    }
+  };
+
+  picturesFilter.addEventListener('click', window.debounce(filterContainerClickHandler));
 
   window.sort = {
     showPicturesSort: showPicturesSort,
