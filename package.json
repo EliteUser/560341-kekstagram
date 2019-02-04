@@ -12,7 +12,9 @@
   },
   "devDependencies": {
     "eslint": "5.7.0",
-    "eslint-config-htmlacademy": "0.5.2"
+    "eslint-config-htmlacademy": "0.5.2",
+    "mocha": "^5.2.0",
+    "chai": "^4.2.0"
   },
   "license": "MIT",
   "dependencies": {},
@@ -20,6 +22,6 @@
     "test": "eslint js/"
   },
   "engines": {
-    "node": "8.11"
+    "node": "10.x.x"
   }
 }
